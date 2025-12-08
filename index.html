@@ -66,18 +66,6 @@
             min-height: 50vh;
         }
 
-        @keyframes slide-up {
-            from {
-                transform: translateY(100%);
-                opacity: 0.5;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
         /* Modal 從底部彈出動畫 */
         .modal-enter-active .modal-content,
         .modal-leave-active .modal-content {
@@ -197,7 +185,7 @@
                     </div>
                 </div>
 
-                <button @click="openModal('add')"
+                <button @click="openModal()"
                     class="fixed bottom-[90px] right-6 w-14 h-14 bg-kyoto-dark text-white rounded-full shadow-float flex items-center justify-center text-2xl z-30 active:scale-95 transition-transform">
                     <i class="fa-solid fa-plus"></i>
                 </button>
@@ -217,7 +205,7 @@
                 </div>
 
                 <div class="space-y-4">
-                    <div v-for="(wish, index) in filteredWishList" :key="index"
+                    <div v-for="(wish, index) in filteredWishList" :key="wish.id"
                         class="bg-white rounded-2xl p-4 shadow-soft relative flex gap-3 items-start">
                         <div class="absolute top-0 left-0 w-1.5 h-full rounded-tl-2xl rounded-bl-2xl"
                             :class="getCategoryColor(wish.category)"></div>
@@ -228,7 +216,7 @@
                                     <button @click="editWish(wish, index)"
                                         class="text-gray-400 hover:text-kyoto-accent"><i
                                             class="fa-solid fa-pen"></i></button>
-                                    <button @click="removeWish(index)" class="text-gray-400 hover:text-red-500"><i
+                                    <button @click="removeWish(wish.id)" class="text-gray-400 hover:text-red-500"><i
                                             class="fa-solid fa-xmark"></i></button>
                                 </div>
                             </div>
@@ -271,7 +259,8 @@
                             <i v-else class="fa-solid fa-bag-shopping text-3xl text-gray-300"></i>
                         </div>
                         <div class="font-bold text-kyoto-dark">{{ item.name }}</div>
-                        <div class="text-xs text-gray-400 mt-1">{{ item.price ? '¥' + item.price : '待定' }}</div>
+                        <div class="text-xs text-gray-400 mt-1">{{ item.price ? '¥' +
+                            parseInt(item.price).toLocaleString() : '待定' }}</div>
                     </div>
                 </div>
                 <button @click="openShopModal"
@@ -287,7 +276,7 @@
                     <div class="space-y-4">
                         <div class="bg-kyoto-bg p-3 rounded-lg flex flex-col">
                             <label class="text-xs text-gray-500 mb-1">日幣 (JPY)</label>
-                            <input type="number" v-model="exchange.jpy" @input="calculateTWDFromJPY"
+                            <input type="number" v-model.number="exchange.jpy" @input="calculateTWDFromJPY"
                                 class="w-full text-2xl font-bold bg-transparent focus:outline-none" placeholder="0">
                         </div>
 
@@ -297,7 +286,7 @@
 
                         <div class="bg-kyoto-bg p-3 rounded-lg flex flex-col">
                             <label class="text-xs text-gray-500 mb-1">台幣 (TWD)</label>
-                            <input type="number" v-model="exchange.twd" @input="calculateJPYFromTWD"
+                            <input type="number" v-model.number="exchange.twd" @input="calculateJPYFromTWD"
                                 class="w-full text-2xl font-bold bg-transparent focus:outline-none" placeholder="0">
                         </div>
                     </div>
@@ -316,7 +305,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <div v-for="(exp, index) in expenses" :key="index"
+                    <div v-for="(exp, index) in expenses" :key="exp.id"
                         class="bg-white rounded-xl p-4 shadow-sm flex justify-between items-center">
                         <div class="flex items-center gap-3">
                             <div
@@ -325,7 +314,8 @@
                             </div>
                             <div>
                                 <div class="font-bold text-gray-800">{{ exp.name }}</div>
-                                <div class="text-xs text-gray-400">{{ exp.date }} · {{ exp.method }}</div>
+                                <div class="text-xs text-gray-400">{{ exp.date }} · {{ exp.method === 'cash' ? '現金' :
+                                    '信用卡' }}</div>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
@@ -333,6 +323,11 @@
                                     class="fa-solid fa-pen text-sm"></i></button>
                             <div class="font-bold text-kyoto-dark">¥ {{ parseInt(exp.amount).toLocaleString() }}</div>
                         </div>
+                    </div>
+
+                    <div v-if="expenses.length === 0" class="text-center text-gray-400 py-10">
+                        <i class="fa-solid fa-yen-sign text-4xl mb-3"></i>
+                        <p>點擊右下角新增記帳</p>
                     </div>
                 </div>
 
@@ -379,6 +374,7 @@
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </h3>
+                    <pre class="text-sm text-gray-700 whitespace-pre-wrap">{{ infoForms.flight }}</pre>
                 </section>
 
                 <section class="bg-white rounded-2xl p-5 shadow-soft">
@@ -390,6 +386,15 @@
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </h3>
+                    <div class="mb-3">
+                        <h4 class="font-bold text-kyoto-dark">{{ infoForms.hotelName }}</h4>
+                        <p class="text-sm text-gray-500 mt-1"><i class="fa-solid fa-phone mr-1"></i> {{
+                            infoForms.hotelPhone }}</p>
+                        <p class="text-sm text-gray-500 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> {{
+                            infoForms.hotelAddress }}</p>
+                        <a v-if="infoForms.hotelMap" :href="infoForms.hotelMap" target="_blank"
+                            class="block mt-3 text-center bg-kyoto-bg text-kyoto-primary py-2 rounded-lg text-sm font-bold">導航前往</a>
+                    </div>
                 </section>
 
                 <section class="bg-white rounded-2xl p-5 shadow-soft">
@@ -400,6 +405,12 @@
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </h3>
+                    <div class="mb-3">
+                        <h4 class="font-bold text-kyoto-dark">{{ infoForms.carName }}</h4>
+                        <p class="text-sm text-gray-500 mt-1">{{ infoForms.carDetails }}</p>
+                        <a v-if="infoForms.carMap" :href="infoForms.carMap" target="_blank"
+                            class="block mt-3 text-center bg-kyoto-bg text-kyoto-primary py-2 rounded-lg text-sm font-bold">導航前往</a>
+                    </div>
                 </section>
             </div>
 
@@ -449,7 +460,7 @@
                                     <option value="drive">開車</option>
                                     <option value="transit">大眾運輸</option>
                                 </select>
-                                <input type="number" v-model="form.travelTime" placeholder="分鐘"
+                                <input type="number" v-model.number="form.travelTime" placeholder="分鐘"
                                     class="flex-1 p-2 rounded border border-gray-200 text-sm">
                             </div>
                         </div>
@@ -501,7 +512,7 @@
                     <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
                         <input type="text" v-model="shopForm.name" placeholder="商品名稱"
                             class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="number" v-model="shopForm.price" placeholder="預估價格 (日幣)"
+                        <input type="number" v-model.number="shopForm.price" placeholder="預估價格 (日幣)"
                             class="w-full p-3 bg-gray-50 rounded-xl border">
 
                         <div class="mt-4">
@@ -534,7 +545,7 @@
                         <input type="text" v-model="expenseForm.name" placeholder="項目名稱"
                             class="w-full p-3 bg-gray-50 rounded-xl">
                         <input type="date" v-model="expenseForm.date" class="w-full p-3 bg-gray-50 rounded-xl">
-                        <input type="number" v-model="expenseForm.amount" placeholder="金額 (日幣)"
+                        <input type="number" v-model.number="expenseForm.amount" placeholder="金額 (日幣)"
                             class="w-full p-3 bg-gray-50 rounded-xl">
                         <div class="flex gap-2">
                             <label class="flex items-center gap-2 p-3 bg-gray-50 rounded-xl flex-1">
@@ -625,19 +636,19 @@
 
                 // Modal 控制與表單
                 const showModal = ref({ itinerary: false, shopping: false, expense: false, wishlist: false, infoEdit: false });
-                const isEditMode = ref(false); // 行程編輯
-                const isWishEditMode = ref(false); // 許願編輯
-                const isExpenseEditMode = ref(false); // 花費編輯
+                const isEditMode = ref(false);
+                const isWishEditMode = ref(false);
+                const isExpenseEditMode = ref(false);
                 const editingId = ref(null);
                 const editingIndex = ref(null);
 
-                const form = ref({ category: 'attraction', name: '', hours: '', ticket: '', notes: '', transportType: 'walk', travelTime: 10, mapLink: '' });
+                const form = ref({ category: 'attraction', name: '', hours: '', ticket: '', notes: '', transportType: 'walk', travelTime: 15, mapLink: '' });
                 const shopForm = ref({ name: '', price: '', image: null });
                 const expenseForm = ref({ id: null, category: 'food', name: '', date: '', amount: '', method: 'cash' });
                 const wishForm = ref({ id: null, name: '', category: 'attraction', externalLink: '', notes: '' });
 
                 // 資訊區編輯
-                const infoEditMode = ref(false); // Check List 編輯模式
+                const infoEditMode = ref(false);
                 const newChecklistItem = ref('');
                 const infoEditTarget = ref(null);
                 const infoEditTargetLabel = ref('');
@@ -658,10 +669,10 @@
                     hotelName: 'Hotel Kanra Kyoto',
                     hotelPhone: '+81 75-344-3815',
                     hotelAddress: '京都市下京區北町190',
-                    hotelMap: 'https://maps.google.com/?q=Hotel+Kanra+Kyoto',
+                    hotelMap: 'https://maps.app.goo.gl/hotel',
                     carName: 'Toyota Rent a Car Osaka',
                     carDetails: '七人座，已預付，取車時間 3/8 10:00',
-                    carMap: 'https://maps.google.com/?q=Toyota+Rent+a+Car+Osaka'
+                    carMap: 'https://maps.app.goo.gl/car'
                 });
 
                 // UI 相關設定
@@ -755,6 +766,52 @@
                     }
                 };
 
+                const moveItem = (index, direction) => {
+                    const list = itineraryData.value[currentDayIndex.value];
+                    const temp = list[index];
+                    list[index] = list[index + direction];
+                    list[index + direction] = temp;
+                    saveToLocal();
+                };
+
+                const openMap = (mapLink, name) => {
+                    let url = '';
+                    if (mapLink && mapLink.startsWith('http')) {
+                        url = mapLink;
+                    } else {
+                        url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}`;
+                    }
+                    window.open(url, '_blank');
+                };
+
+                // 購物清單相關
+                const openShopModal = () => {
+                    shopForm.value = { name: '', price: '', image: null };
+                    showModal.value.shopping = true;
+                };
+
+                const handleShopImage = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => shopForm.value.image = e.target.result;
+                        reader.readAsDataURL(file);
+                    }
+                };
+
+                const saveShopping = () => {
+                    shoppingList.value.push({ ...shopForm.value });
+                    saveToLocal();
+                    showModal.value.shopping = false;
+                };
+
+                const removeShoppingItem = (index) => {
+                    if (confirm('刪除此商品？')) {
+                        shoppingList.value.splice(index, 1);
+                        saveToLocal();
+                    }
+                }
+
                 // 許願相關
                 const openWishModal = () => {
                     isWishEditMode.value = false;
@@ -772,16 +829,30 @@
 
                 const saveWish = () => {
                     if (isWishEditMode.value) {
-                        wishList.value[editingIndex.value] = { ...wishForm.value };
+                        // 編輯模式下，使用 index 更新
+                        const originalId = wishList.value[editingIndex.value].id;
+                        wishList.value[editingIndex.value] = { ...wishForm.value, id: originalId };
                     } else {
-                        wishList.value.push({ ...wishForm.value });
+                        // 新增模式
+                        wishList.value.push({ ...wishForm.value, id: Date.now() });
                     }
                     saveToLocal();
                     showModal.value.wishlist = false;
                 };
 
+                const removeWish = (idToRemove) => {
+                    if (confirm('確定要刪除此許願項目嗎？')) {
+                        const index = wishList.value.findIndex(wish => wish.id === idToRemove);
+                        if (index !== -1) {
+                            wishList.value.splice(index, 1);
+                            saveToLocal();
+                        }
+                    }
+                }
+
                 const deleteWishItem = () => {
                     if (confirm('確定要刪除此許願項目嗎？')) {
+                        // 由於是透過 index 編輯，直接使用 index 刪除
                         wishList.value.splice(editingIndex.value, 1);
                         saveToLocal();
                         showModal.value.wishlist = false;
@@ -805,9 +876,10 @@
 
                 const saveExpense = () => {
                     if (isExpenseEditMode.value) {
-                        expenses.value[editingIndex.value] = { ...expenseForm.value };
+                        const originalId = expenses.value[editingIndex.value].id;
+                        expenses.value[editingIndex.value] = { ...expenseForm.value, id: originalId };
                     } else {
-                        expenses.value.push({ ...expenseForm.value });
+                        expenses.value.push({ ...expenseForm.value, id: Date.now() });
                     }
                     saveToLocal();
                     showModal.value.expense = false;
@@ -829,7 +901,6 @@
                 };
 
                 const saveInfoEdit = () => {
-                    // 實際儲存邏輯 (已由 Vue 雙向綁定到 infoForms.value，只需觸發 local save)
                     saveToLocal();
                     showModal.value.infoEdit = false;
                 };
@@ -850,40 +921,32 @@
 
                 // 匯率計算
                 const calculateTWDFromJPY = () => {
-                    exchange.value.twd = (exchange.value.jpy * exchange.value.rate).toFixed(2);
+                    // 確保輸入值是數字
+                    if (!isNaN(exchange.value.jpy) && exchange.value.jpy !== null) {
+                        exchange.value.twd = (exchange.value.jpy * exchange.value.rate).toFixed(2);
+                    } else {
+                        exchange.value.twd = 0;
+                    }
                 };
 
                 const calculateJPYFromTWD = () => {
-                    if (exchange.value.rate > 0) {
+                    // 確保輸入值是數字且匯率大於 0
+                    if (!isNaN(exchange.value.twd) && exchange.value.twd !== null && exchange.value.rate > 0) {
                         exchange.value.jpy = (exchange.value.twd / exchange.value.rate).toFixed(2);
                     } else {
                         exchange.value.jpy = 0;
                     }
                 };
 
+                // 監聽匯率變動並更新雙向計算
+                watch(() => exchange.value.jpy, calculateTWDFromJPY);
+                watch(() => exchange.value.twd, calculateJPYFromTWD);
+
+
                 // 工具
                 const closeModal = () => {
                     showModal.value.itinerary = false;
                 };
-
-                const moveItem = (index, direction) => {
-                    const list = itineraryData.value[currentDayIndex.value];
-                    const temp = list[index];
-                    list[index] = list[index + direction];
-                    list[index + direction] = temp;
-                    saveToLocal();
-                };
-
-                const openMap = (mapLink, name) => {
-                    let url = '';
-                    if (mapLink && mapLink.startsWith('http')) {
-                        url = mapLink;
-                    } else {
-                        url = `http://googleusercontent.com/maps.google.com/7{encodeURIComponent(name)}`;
-                    }
-                    window.open(url, '_blank');
-                };
-
 
                 const getCategoryColor = (cat) => {
                     const map = { ...categoryMap, ...wishlistCategories };
@@ -916,11 +979,11 @@
                         checklist: checklist.value,
                         exchangeRate: exchange.value.rate
                     };
-                    localStorage.setItem('kyotoTripData_V2', JSON.stringify(data));
+                    localStorage.setItem('kyotoTripData_V3', JSON.stringify(data));
                 };
 
                 onMounted(() => {
-                    const saved = localStorage.getItem('kyotoTripData_V2');
+                    const saved = localStorage.getItem('kyotoTripData_V3');
                     if (saved) {
                         const parsed = JSON.parse(saved);
                         headerImage.value = parsed.headerImage || headerImage.value;
@@ -931,7 +994,18 @@
                         infoForms.value = parsed.infoForms || infoForms.value;
                         checklist.value = parsed.checklist || checklist.value;
                         exchange.value.rate = parsed.exchangeRate || 0.20;
+                    } else {
+                        // 首次載入，確保匯率計算基於預設值
+                        calculateTWDFromJPY();
                     }
+
+                    // 資料結構遷移：確保舊行程資料有 mapLink 欄位
+                    Object.keys(itineraryData.value).forEach(day => {
+                        itineraryData.value[day] = itineraryData.value[day].map(item => ({
+                            mapLink: '', // 新增欄位
+                            ...item,
+                        }));
+                    });
                 });
 
                 // 監聽 Check List 變動並儲存
@@ -945,9 +1019,9 @@
                     saveItinerary, deleteItem, moveItem, editItem, openModal, closeModal, openMap,
                     getCategoryColor, getCategoryLabel, getTransportIcon,
                     exchange, calculateTWDFromJPY, calculateJPYFromTWD,
-                    shoppingList, shopForm, saveShopping,
+                    shoppingList, shopForm, saveShopping, handleShopImage, removeShoppingItem, openShopModal,
                     expenses, totalExpense, openExpenseModal, expenseForm, saveExpense, getExpenseIcon, editExpense, deleteExpenseItem, isExpenseEditMode,
-                    wishList, openWishModal, wishForm, saveWish, editWish, deleteWishItem, isWishEditMode,
+                    wishList, openWishModal, wishForm, saveWish, editWish, removeWish, deleteWishItem, isWishEditMode,
                     wishlistCategories, wishFilter, filteredWishList,
                     infoEditMode, checklist, newChecklistItem, addChecklistItem, removeChecklistItem,
                     infoEditTarget, infoEditTargetLabel, openInfoEditModal, infoForms, saveInfoEdit
