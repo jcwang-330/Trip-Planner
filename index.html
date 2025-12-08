@@ -127,11 +127,11 @@
 
         <div class="relative h-64 overflow-hidden shadow-soft">
             <img :src="headerImage" alt="Kyoto Street View" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6 text-white">
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6 text-white">
                 <h1 class="text-4xl font-bold tracking-wide">行程</h1>
             </div>
-            <label
-                class="absolute top-4 right-4 bg-white/30 hover:bg-white/50 p-2 rounded-full cursor-pointer transition-colors">
+            <label class="absolute top-4 right-4 bg-white/30 hover:bg-white/50 p-2 rounded-full cursor-pointer transition-colors">
                 <i class="fa-solid fa-camera text-white text-lg"></i>
                 <input type="file" @change="uploadHeader" class="hidden" accept="image/*">
             </label>
@@ -212,16 +212,13 @@
                                             <h4 class="font-bold text-kyoto-dark">{{ item.name }}</h4>
                                             <p class="text-sm text-gray-600">{{ item.description }}</p>
                                             <div class="mt-2 space-y-2">
-                                                <div v-if="item.duration"
-                                                    class="flex items-center text-sm text-gray-600">
+                                                <div v-if="item.duration" class="flex items-center text-sm text-gray-600">
                                                     <i class="fa-solid fa-route w-4 mr-2 text-kyoto-accent"></i>
                                                     <span>{{ item.duration }}</span>
                                                 </div>
 
-                                                <div v-if="item.imageUrl"
-                                                    class="relative h-24 w-full rounded-lg overflow-hidden mt-2">
-                                                    <img :src="item.imageUrl" alt="Itinerary Image"
-                                                        class="w-full h-full object-cover">
+                                                <div v-if="item.imageUrl" class="relative h-24 w-full rounded-lg overflow-hidden mt-2">
+                                                    <img :src="item.imageUrl" alt="Itinerary Image" class="w-full h-full object-cover">
                                                 </div>
 
                                                 <button v-if="item.mapLink"
@@ -258,8 +255,7 @@
                     <select v-model="strategyFilter"
                         class="p-2 bg-white rounded-lg border text-sm focus:border-kyoto-primary focus:ring-kyoto-primary">
                         <option value="">所有類別</option>
-                        <option v-for="(cat, key) in strategyCategories" :key="key" :value="key">{{ cat.label }}
-                        </option>
+                        <option v-for="(cat, key) in strategyCategories" :key="key" :value="key">{{ cat.label }}</option>
                     </select>
                 </div>
 
@@ -313,11 +309,9 @@
                         <div @click="swapCurrencies"
                             class="flex items-center space-x-2 text-kyoto-primary cursor-pointer active:opacity-75 transition-opacity">
                             <i class="fa-solid fa-rotate text-lg"></i>
-                            <span class="text-lg font-bold">{{ exchange.fromCurrency }} &rarr; {{ exchange.toCurrency
-                                }}</span>
+                            <span class="text-lg font-bold">{{ exchange.fromCurrency }} &rarr; {{ exchange.toCurrency }}</span>
                         </div>
-                        <div class="text-xl font-bold text-kyoto-dark">{{ exchange.toCurrency }} {{ calculateResult }}
-                        </div>
+                        <div class="text-xl font-bold text-kyoto-dark">{{ exchange.toCurrency }} {{ calculateResult }}</div>
                     </div>
                 </div>
 
@@ -330,8 +324,7 @@
                     <button @click="appendDigit('4')" class="calc-key bg-white text-kyoto-dark">4</button>
                     <button @click="appendDigit('5')" class="calc-key bg-white text-kyoto-dark">5</button>
                     <button @click="appendDigit('6')" class="calc-key bg-white text-kyoto-dark">6</button>
-                    <button @click="deleteDigit" class="calc-key bg-calculator-op text-kyoto-dark"><i
-                            class="fa-solid fa-delete-left"></i></button>
+                    <button @click="deleteDigit" class="calc-key bg-calculator-op text-kyoto-dark"><i class="fa-solid fa-delete-left"></i></button>
 
                     <button @click="appendDigit('1')" class="calc-key bg-white text-kyoto-dark">1</button>
                     <button @click="appendDigit('2')" class="calc-key bg-white text-kyoto-dark">2</button>
@@ -363,8 +356,8 @@
                             <div class="text-xs text-gray-500">{{ exp.date }} / {{ exp.method }}</div>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <button @click="editExpense(exp, index)" class="text-gray-400 hover:text-kyoto-accent"><i
-                                    class="fa-solid fa-pen text-sm"></i></button>
+                            <button @click="editExpense(exp, index)"
+                                class="text-gray-400 hover:text-kyoto-accent"><i class="fa-solid fa-pen text-sm"></i></button>
                             <div class="font-bold text-kyoto-dark">¥ {{ parseInt(exp.amount).toLocaleString() }}</div>
                         </div>
                     </div>
@@ -383,38 +376,32 @@
                     <div class="flex justify-between items-center mb-3">
                         <h3 class="text-xl font-bold">行前檢查清單</h3>
                         <button @click="infoEditMode.checklist = !infoEditMode.checklist"
-                            class="text-sm text-kyoto-primary hover:text-kyoto-accent">{{ infoEditMode.checklist ? '完成'
-                            : '編輯' }}</button>
+                            class="text-sm text-kyoto-primary hover:text-kyoto-accent">{{ infoEditMode.checklist ? '完成' : '編輯' }}</button>
                     </div>
                     <div class="space-y-2">
                         <div v-for="(item, index) in checklist" :key="index" class="flex items-center justify-between">
                             <label class="flex items-center">
-                                <input type="checkbox" v-model="item.done" @change="saveToLocal"
-                                    class="form-checkbox text-kyoto-primary h-4 w-4 rounded border-gray-300">
-                                <span :class="{'line-through text-gray-400': item.done}" class="ml-2">{{ item.text
-                                    }}</span>
+                                <input type="checkbox" v-model="item.done" @change="saveToLocal" class="form-checkbox text-kyoto-primary h-4 w-4 rounded border-gray-300">
+                                <span :class="{'line-through text-gray-400': item.done}" class="ml-2">{{ item.text }}</span>
                             </label>
-                            <button v-if="infoEditMode.checklist" @click="removeChecklistItem(index)"
-                                class="text-red-500 ml-3 hover:text-red-700">
+                            <button v-if="infoEditMode.checklist" @click="removeChecklistItem(index)" class="text-red-500 ml-3 hover:text-red-700">
                                 <i class="fa-solid fa-trash text-sm"></i>
                             </button>
                         </div>
                     </div>
                     <div v-if="infoEditMode.checklist" class="mt-3 flex">
-                        <input type="text" v-model="newChecklistItem" placeholder="新增清單項目"
-                            @keyup.enter="addChecklistItem"
+                        <input type="text" v-model="newChecklistItem" placeholder="新增清單項目" @keyup.enter="addChecklistItem"
                             class="flex-grow p-2 bg-gray-50 rounded-l-xl border focus:outline-none">
-                        <button @click="addChecklistItem"
-                            class="bg-kyoto-primary text-white p-2 rounded-r-xl">新增</button>
+                        <button @click="addChecklistItem" class="bg-kyoto-primary text-white p-2 rounded-r-xl">新增</button>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <div v-for="(form, key) in infoForms" :key="key" class="bg-kyoto-light rounded-2xl p-4 shadow-soft">
+                    <div v-for="(form, key) in infoForms" :key="key"
+                        class="bg-kyoto-light rounded-2xl p-4 shadow-soft">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="text-xl font-bold">{{ form.label }}</h3>
-                            <button @click="openInfoEditModal(key)"
-                                class="text-sm text-kyoto-primary hover:text-kyoto-accent">
+                            <button @click="openInfoEditModal(key)" class="text-sm text-kyoto-primary hover:text-kyoto-accent">
                                 編輯 <i class="fa-solid fa-pen ml-1"></i>
                             </button>
                         </div>
@@ -424,12 +411,10 @@
             </div>
 
             <div v-if="currentTab === 'hotel'" class="space-y-4">
-                <div v-for="(hotel, index) in hotelList" :key="hotel.id"
-                    class="bg-kyoto-light rounded-2xl p-4 shadow-soft space-y-3">
+                <div v-for="(hotel, index) in hotelList" :key="hotel.id" class="bg-kyoto-light rounded-2xl p-4 shadow-soft space-y-3">
                     <div class="flex justify-between items-start">
                         <h3 class="text-xl font-bold text-kyoto-dark">{{ hotel.name }}</h3>
-                        <button @click="openHotelModal(hotel, index)"
-                            class="text-kyoto-primary hover:text-kyoto-accent">
+                        <button @click="openHotelModal(hotel, index)" class="text-kyoto-primary hover:text-kyoto-accent">
                             <i class="fa-solid fa-pen"></i>
                         </button>
                     </div>
@@ -471,14 +456,10 @@
                 <div class="bg-white w-full max-w-md rounded-2xl p-6 modal-content">
                     <h3 class="text-xl font-bold mb-4">{{ isEditMode ? '編輯行程' : '新增行程' }}</h3>
                     <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-                        <input type="text" v-model="form.location" placeholder="地點名稱 (例如：清水寺)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="text" v-model="form.name" placeholder="活動名稱 (例如：參觀本堂)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="time" v-model="form.startTime" placeholder="時間 (例如：10:00)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <textarea v-model="form.description" placeholder="備註或簡介" rows="3"
-                            class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
+                        <input type="text" v-model="form.location" placeholder="地點名稱 (例如：清水寺)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="text" v-model="form.name" placeholder="活動名稱 (例如：參觀本堂)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="time" v-model="form.startTime" placeholder="時間 (例如：10:00)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <textarea v-model="form.description" placeholder="備註或簡介" rows="3" class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
 
                         <select v-model="form.category" class="w-full p-3 bg-gray-50 rounded-xl border">
                             <option value="">選擇類別</option>
@@ -496,27 +477,20 @@
                             <option value="taxi">計程車</option>
                             <option value="plane">飛機</option>
                         </select>
-                        <input type="text" v-model="form.duration" placeholder="所需時間 (例如：20分鐘)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="url" v-model="form.mapLink" placeholder="Google Map 導航連結"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-
+                        <input type="text" v-model="form.duration" placeholder="所需時間 (例如：20分鐘)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="url" v-model="form.mapLink" placeholder="Google Map 導航連結" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        
                         <div class="pt-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">行程圖片 (選填)</label>
-                            <input type="file" @change="handleItineraryImage"
-                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-kyoto-bg file:text-kyoto-primary hover:file:bg-kyoto-secondary/10">
-                            <img v-if="form.imageUrl" :src="form.imageUrl" alt="預覽"
-                                class="mt-2 w-full h-24 object-cover rounded-lg">
+                            <input type="file" @change="handleItineraryImage" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-kyoto-bg file:text-kyoto-primary hover:file:bg-kyoto-secondary/10">
+                            <img v-if="form.imageUrl" :src="form.imageUrl" alt="預覽" class="mt-2 w-full h-24 object-cover rounded-lg">
                         </div>
 
                     </div>
                     <div class="flex gap-3 mt-4">
-                        <button v-if="isEditMode" @click="deleteItem(form.id); closeModal('itinerary')"
-                            class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
-                        <button @click="closeModal('itinerary')"
-                            class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
-                        <button @click="saveItinerary"
-                            class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
+                        <button v-if="isEditMode" @click="deleteItem(form.id); closeModal('itinerary')" class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
+                        <button @click="closeModal('itinerary')" class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
+                        <button @click="saveItinerary" class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
                     </div>
                 </div>
             </div>
@@ -527,34 +501,24 @@
                 <div class="bg-white w-full max-w-md rounded-2xl p-6 modal-content">
                     <h3 class="text-xl font-bold mb-4">{{ isStrategyEditMode ? '編輯攻略' : '新增攻略' }}</h3>
                     <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-                        <input type="text" v-model="strategyForm.title" placeholder="標題/名稱"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="text" v-model="strategyForm.title" placeholder="標題/名稱" class="w-full p-3 bg-gray-50 rounded-xl border">
                         <select v-model="strategyForm.category" class="w-full p-3 bg-gray-50 rounded-xl border">
                             <option value="">選擇類別</option>
-                            <option v-for="(cat, key) in strategyCategories" :key="key" :value="key">{{ cat.label }}
-                            </option>
+                            <option v-for="(cat, key) in strategyCategories" :key="key" :value="key">{{ cat.label }}</option>
                         </select>
-                        <input type="text" v-model="strategyForm.location" placeholder="地點 (例如：大阪/京都)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <textarea v-model="strategyForm.notes" placeholder="筆記/心得/攻略細節" rows="5"
-                            class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
+                        <input type="text" v-model="strategyForm.location" placeholder="地點 (例如：大阪/京都)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <textarea v-model="strategyForm.notes" placeholder="筆記/心得/攻略細節" rows="5" class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
 
                         <div class="pt-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">攻略圖片 (選填)</label>
-                            <input type="file" @change="handleStrategyImage"
-                                class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-kyoto-bg file:text-kyoto-primary hover:file:bg-kyoto-secondary/10">
-                            <img v-if="strategyForm.imageUrl" :src="strategyForm.imageUrl" alt="預覽"
-                                class="mt-2 w-full h-24 object-cover rounded-lg">
+                            <input type="file" @change="handleStrategyImage" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-kyoto-bg file:text-kyoto-primary hover:file:bg-kyoto-secondary/10">
+                            <img v-if="strategyForm.imageUrl" :src="strategyForm.imageUrl" alt="預覽" class="mt-2 w-full h-24 object-cover rounded-lg">
                         </div>
                     </div>
                     <div class="flex gap-3 mt-4">
-                        <button v-if="isStrategyEditMode"
-                            @click="deleteStrategyItem(strategyForm.id); closeModal('strategy')"
-                            class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
-                        <button @click="closeModal('strategy')"
-                            class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
-                        <button @click="saveStrategy"
-                            class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
+                         <button v-if="isStrategyEditMode" @click="deleteStrategyItem(strategyForm.id); closeModal('strategy')" class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
+                        <button @click="closeModal('strategy')" class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
+                        <button @click="saveStrategy" class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
                     </div>
                 </div>
             </div>
@@ -565,10 +529,8 @@
                 <div class="bg-white w-full max-w-md rounded-2xl p-6 modal-content">
                     <h3 class="text-xl font-bold mb-4">{{ isExpenseEditMode ? '編輯花費' : '新增花費' }}</h3>
                     <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-                        <input type="text" v-model="expenseForm.name" placeholder="消費名稱 (例如：拉麵午餐)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="number" v-model.number="expenseForm.amount" placeholder="金額 (日圓)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="text" v-model="expenseForm.name" placeholder="消費名稱 (例如：拉麵午餐)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="number" v-model.number="expenseForm.amount" placeholder="金額 (日圓)" class="w-full p-3 bg-gray-50 rounded-xl border">
                         <input type="date" v-model="expenseForm.date" class="w-full p-3 bg-gray-50 rounded-xl border">
 
                         <select v-model="expenseForm.category" class="w-full p-3 bg-gray-50 rounded-xl border">
@@ -584,17 +546,12 @@
                             <option value="cash">現金 (Cash)</option>
                             <option value="card">信用卡/電子支付 (Card)</option>
                         </select>
-                        <input type="text" v-model="expenseForm.notes" placeholder="備註"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
+                        <input type="text" v-model="expenseForm.notes" placeholder="備註" class="w-full p-3 bg-gray-50 rounded-xl border">
                     </div>
                     <div class="flex gap-3 mt-4">
-                        <button v-if="isExpenseEditMode"
-                            @click="deleteExpenseItem(expenseForm.id); closeModal('expense')"
-                            class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
-                        <button @click="closeModal('expense')"
-                            class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
-                        <button @click="saveExpense"
-                            class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
+                        <button v-if="isExpenseEditMode" @click="deleteExpenseItem(expenseForm.id); closeModal('expense')" class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
+                        <button @click="closeModal('expense')" class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
+                        <button @click="saveExpense" class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">確認</button>
                     </div>
                 </div>
             </div>
@@ -604,40 +561,30 @@
             <div v-if="showModal.infoEdit" class="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-4">
                 <div class="bg-white w-full max-w-md rounded-2xl p-6 modal-content">
                     <h3 class="text-xl font-bold mb-4">編輯 {{ infoEditTargetLabel }}</h3>
-                    <textarea v-model="infoForms[infoEditTarget].content" placeholder="在此輸入內容..." rows="10"
-                        class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
+                    <textarea v-model="infoForms[infoEditTarget].content" placeholder="在此輸入內容..." rows="10" class="w-full p-3 bg-gray-50 rounded-xl border"></textarea>
                     <div class="flex gap-3 mt-4">
-                        <button @click="closeModal('infoEdit')"
-                            class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
-                        <button @click="saveInfoEdit"
-                            class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">儲存</button>
+                        <button @click="closeModal('infoEdit')" class="flex-1 bg-gray-200 text-gray-600 py-3 rounded-xl font-bold">取消</button>
+                        <button @click="saveInfoEdit" class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl font-bold">儲存</button>
                     </div>
                 </div>
             </div>
         </transition>
 
         <transition name="modal">
-            <div v-if="showModal.hotel" class="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-4">
+             <div v-if="showModal.hotel" class="fixed inset-0 bg-black/50 z-50 flex items-end justify-center p-4">
                 <div class="bg-white w-full max-w-md rounded-2xl p-6 modal-content">
                     <h3 class="text-xl font-bold mb-4">{{ isHotelEditMode ? '編輯住宿資訊' : '新增住宿資訊' }}</h3>
                     <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
-                        <input type="text" v-model="hotelForm.name" placeholder="飯店名稱"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="text" v-model="hotelForm.period" placeholder="入住/退房日期 (例如：3/6 - 3/8)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="tel" v-model="hotelForm.phone" placeholder="電話"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="text" v-model="hotelForm.address" placeholder="地址"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
-                        <input type="url" v-model="hotelForm.mapLink" placeholder="導航連結 (Google Map)"
-                            class="w-full p-3 bg-gray-50 rounded-xl border">
+                         <input type="text" v-model="hotelForm.name" placeholder="飯店名稱" class="w-full p-3 bg-gray-50 rounded-xl border">
+                         <input type="text" v-model="hotelForm.period" placeholder="入住/退房日期 (例如：3/6 - 3/8)" class="w-full p-3 bg-gray-50 rounded-xl border">
+                         <input type="tel" v-model="hotelForm.phone" placeholder="電話" class="w-full p-3 bg-gray-50 rounded-xl border">
+                         <input type="text" v-model="hotelForm.address" placeholder="地址" class="w-full p-3 bg-gray-50 rounded-xl border">
+                         <input type="url" v-model="hotelForm.mapLink" placeholder="導航連結 (Google Map)" class="w-full p-3 bg-gray-50 rounded-xl border">
                     </div>
                     <div class="flex gap-3 mt-4">
-                        <button v-if="isHotelEditMode" @click="deleteHotel(editingHotelIndex); closeModal('hotel');"
-                            class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
+                        <button v-if="isHotelEditMode" @click="deleteHotel(editingHotelIndex); closeModal('hotel');" class="flex-1 bg-red-100 text-red-500 py-3 rounded-xl font-bold">刪除</button>
                         <button @click="closeModal('hotel')" class="flex-1 bg-gray-200 py-3 rounded-xl">取消</button>
-                        <button @click="saveHotel"
-                            class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl">儲存</button>
+                        <button @click="saveHotel" class="flex-1 bg-kyoto-primary text-white py-3 rounded-xl">儲存</button>
                     </div>
                 </div>
             </div>
@@ -789,7 +736,7 @@
                         reader.readAsDataURL(file);
                     }
                 };
-
+                
                 // 攻略圖片上傳
                 const handleStrategyImage = (e) => {
                     const file = e.target.files[0];
@@ -1262,7 +1209,7 @@
                 watch([checklist, infoForms, expenses, strategyList, hotelList, headerImage], () => {
                     saveToLocal();
                 }, { deep: true });
-
+                
                 // 天氣 iframe 連結 (範例)
                 const weatherIframeSrc = 'https://www.accuweather.com/en/jp/osaka/224950/weather-forecast/224950';
 
